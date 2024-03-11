@@ -4,4 +4,6 @@ class Monomial:
     coefficient: float = 0
 
     def as_string(self):
-        return str(self.coefficient) + "".join(self.variables)
+        _temp = str(self.coefficient) if self.coefficient < 0 else ("+" + str(self.coefficient))
+        return _temp + "".join(self.variables)
+    
