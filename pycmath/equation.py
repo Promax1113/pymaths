@@ -10,6 +10,14 @@ class Result:
         self.x2 = _x2
         self.from_operation = _from_operation
 
+    def get_values(self):
+        return {
+            'x1': self.x1,
+            'x2': self.x2,
+            'from_operation': self.from_operation if self.from_operation else "none specified"
+        }
+
+
 
 class Coefficients:
     a: float
@@ -27,12 +35,14 @@ class Coefficients:
     def get_coefs(self) -> dict:
         return {'a': self.a, 'b': self.b, 'c': self.c}
 
+
+
 def solve_quadratic_equation(coef: Coefficients) -> Result:
     disc = pow(coef.b, 2) - 4 * coef.a * coef.c
-    if disc > 0:
+    if disc < 0:
         raise ValueError("There is no real solution!")
     pos = (-coef.b + disc)/ (coef.a * 2)
     neg = (-coef.b - disc)/ (coef.a * 2)
-    return Result(pos, neg, "quadratic")
+    return Result(pos, neg)
     
 
