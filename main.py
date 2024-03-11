@@ -1,7 +1,5 @@
 from pycmath import Polynomial
-from pycmath import Monomial
+from pycmath import Coefficients, solve_quadratic_equation
 
-p = Polynomial("-1x")
-print("len is",len(p.members))
-for mon in p.members:
-    print(mon.as_string())
+solve_quadratic_equation(Coefficients())
+
