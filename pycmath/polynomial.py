@@ -1,4 +1,3 @@
-from typing import _ProtocolMeta
 from .monomial import Monomial
 
 class Polynomial:
@@ -28,7 +27,7 @@ class Polynomial:
         index = 0
         last_searched = 0
         mon = Monomial()
-        while index < len(p):
+        while index < len(p) - 1:
             if last_searched != 0:
                 index = last_searched
             if mon.coefficient == 0:
@@ -37,10 +36,12 @@ class Polynomial:
             if p[index].isdigit():
                 coef = [p[index]]
                 last_searched = 0
-                for c in p:
-                    if c.isdigit():
-                        coef.append(c)
-                        last_searched = p.index(c)
+                _ind = index + 1
+                while _ind < len(p):
+                    if p[_ind].isdigit():
+                        coef.append(p[_ind])
+                        last_searched = _ind
+                        _ind += 1
                     else:
                         break
                 if index-1 >= 0:
@@ -54,18 +55,24 @@ class Polynomial:
                             mon.coefficient = float(coef)
                     print("Coefs currently:", mon.coefficient)
             elif p[index].isalpha():
+
                 _ind = index
+                print(_ind, len(p))
                 while _ind < len(p):
                     if p[_ind].isalpha():
                         mon.variables.append(p[_ind])
-                        last_searched = p.index(p[_ind])
+                        last_searched = _ind + 1
                         _ind += 1
                     else:
                         break
+
                 self.members.append(mon)
+                mon = Monomial()
+                continue
 
             else:
                 print("It was different!")
+                last_searched += 1
                 index += 1
                 continue
             index += 1
