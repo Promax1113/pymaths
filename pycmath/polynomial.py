@@ -27,11 +27,13 @@ class Polynomial:
         index = 0
         last_searched = 0
         mon = Monomial()
-        while index < len(p) - 1:
+        while index < len(p):
             if last_searched != 0:
                 index = last_searched
             if mon.coefficient == 0:
                 mon = Monomial()
+                mon.variables = []
+            print(index, len(p) - 1)
             print(p[index].isdigit(), p[index].isalpha(), p[index])
             if p[index].isdigit():
                 coef = [p[index]]
@@ -54,6 +56,8 @@ class Polynomial:
                         else:
                             mon.coefficient = float(coef)
                     print("Coefs currently:", mon.coefficient)
+                    if index + 1 == len(p):
+                        self.members.append(mon)
             elif p[index].isalpha():
 
                 _ind = index
@@ -68,6 +72,7 @@ class Polynomial:
 
                 self.members.append(mon)
                 mon = Monomial()
+                mon.variables = []
                 continue
 
             else:
@@ -76,3 +81,6 @@ class Polynomial:
                 index += 1
                 continue
             index += 1
+    def get_coefficients(self):
+        self.coefficients = [mon.coefficient for mon in self.members]
+        return self.coefficients
