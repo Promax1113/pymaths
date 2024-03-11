@@ -33,8 +33,8 @@ class Polynomial:
             if mon.coefficient == 0:
                 mon = Monomial()
                 mon.variables = []
-            print(index, len(p) - 1)
-            print(p[index].isdigit(), p[index].isalpha(), p[index])
+            #print(index, len(p) - 1)
+            #print(p[index].isdigit(), p[index].isalpha(), p[index])
             if p[index].isdigit():
                 coef = [p[index]]
                 last_searched = 0
