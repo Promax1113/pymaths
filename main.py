@@ -1,4 +1,6 @@
 from pycmath import Polynomial
 from pycmath import Coefficients, solve_quadratic_equation
 
-print(solve_quadratic_equation(Coefficients([22, -70, 4])).get_values())
+pol = Polynomial("+1x - 5x - 14")
+pol.get_coefficients()
+print(pol.coefficients)
