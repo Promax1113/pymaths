@@ -46,13 +46,26 @@ def solve_quadratic_equation(coef: Coefficients) -> Result:
     return Result(neg, pos, "from_complete_quadratic")
     
 class Tests:
+    complete_quad: str = "from_complete_quadratic"
     @staticmethod
     def test1():
-        assert solve_quadratic_equation(Coefficients([1, -5, -14])).get_values() == Result(-2.0, 7.0).get_values()
+        assert solve_quadratic_equation(Coefficients([1, -5, -14])).get_values() == Result(-2.0, 7.0, Tests.complete_quad).get_values()
     # Should add more tests.
-
+    @staticmethod
     def test2():
-        assert solve_quadratic_equation(Coefficients([-1, 11, -28])).get_values() == Result(4.0, 7.0).get_values()
+        assert solve_quadratic_equation(Coefficients([-1, 11, -28])).get_values() == Result(4.0, 7.0, Tests.complete_quad).get_values()
+
+    @staticmethod
+    def print_result(to_run):
+        try:
+            print(f"\nStarting test of {to_run.__name__}!")
+            assert(to_run)
+            print("Successful!\n")
+        except:
+            print(f"Failed {to_run.__name__}!")
 
 if __name__ == "__main__":
-    Tests.test1()
+    print("Starting tests!")
+    
+    Tests.print_result(Tests.test1)
+    Tests.print_result(Tests.test2)
