@@ -1,7 +1,5 @@
 from pycmath import Polynomial
-from pycmath import ruffini
+from pycmath import Coefficients, solve_quadratic_equation
 
-p1 = Polynomial("10x + 10y")
-
-res = ruffini(1, p1.get_coefficients())
-print(res)
+pol = Polynomial("+x^2 - 5x - 14")
+print([mon.as_string() for mon in pol.members])

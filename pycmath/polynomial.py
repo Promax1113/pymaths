@@ -1,4 +1,9 @@
-from .monomial import Monomial
+from .monomial import Monomial, Variable
+from .equation import Coefficients
+from string import ascii_lowercase
+
+
+
 
 class Polynomial:
     members: list[Monomial] = []
@@ -26,6 +31,7 @@ class Polynomial:
         p = list(polynomial.replace(" ", ""))
         index = 0
         last_searched = 0
+
         mon = Monomial()
         while index < len(p):
             if last_searched != 0:
@@ -58,15 +64,33 @@ class Polynomial:
                     print("Coefs currently:", mon.coefficient)
                     if index + 1 == len(p):
                         self.members.append(mon)
-            elif p[index].isalpha():
+            elif p[index] in list(ascii_lowercase):
 
                 _ind = index
                 print(_ind, len(p))
+                had_exponent: bool = False
                 while _ind < len(p):
-                    if p[_ind].isalpha():
-                        mon.variables.append(p[_ind])
-                        last_searched = _ind + 1
-                        _ind += 1
+                    if p[_ind] in list(ascii_lowercase):
+                        if _ind + 2 < len(p):
+                            if p[_ind + 1] == "^":
+                                __ind = _ind + 2
+                                deg: list = []
+                                while __ind < len(p):
+                                    if p[__ind].isdigit():
+                                        deg.append(p[__ind])
+                                        __ind += 1
+                                    else:
+                                        break
+                                mon.variables.append(Variable(p[_ind], int("".join(deg))))
+                                had_exponent = True
+                            else:
+                                mon.variables.append(Variable(p[_ind]))
+
+                        if had_exponent is False:
+                            _ind += 1
+                        else:
+                            _ind += len(deg) + 2
+                        last_searched = _ind
                     else:
                         break
 
@@ -83,4 +107,6 @@ class Polynomial:
             index += 1
     def get_coefficients(self):
         self.coefficients = [mon.coefficient for mon in self.members]
-        return self.coefficients
+        return Coefficients(self.coefficients)
+
+
