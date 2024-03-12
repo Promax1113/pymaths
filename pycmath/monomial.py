@@ -18,3 +18,4 @@ class Monomial:
 
     def as_string(self):
         return str(self.coefficient if self.coefficient != 1 else "") + self.combine_vars()
+

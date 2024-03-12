@@ -4,6 +4,7 @@ from string import ascii_lowercase
 
 
 
+
 class Polynomial:
     members: list[Monomial] = []
     degree: int = 0
@@ -92,10 +93,12 @@ class Polynomial:
                         last_searched = _ind
                     else:
                         break
+
                 self.members.append(mon)
                 mon = Monomial()
                 mon.variables = []
                 continue
+
             else:
                 print("It was different!")
                 last_searched += 1
@@ -105,3 +108,5 @@ class Polynomial:
     def get_coefficients(self):
         self.coefficients = [mon.coefficient for mon in self.members]
         return Coefficients(self.coefficients)
+
+
