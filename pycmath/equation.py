@@ -43,13 +43,16 @@ def solve_quadratic_equation(coef: Coefficients) -> Result:
     
     pos = (-coef.b + sqrt(disc))/ (coef.a * 2)
     neg = (-coef.b - sqrt(disc))/ (coef.a * 2)
-    return Result(neg, pos)
+    return Result(neg, pos, "from_complete_quadratic")
     
 class Tests:
     @staticmethod
     def test1():
         assert solve_quadratic_equation(Coefficients([1, -5, -14])).get_values() == Result(-2.0, 7.0).get_values()
     # Should add more tests.
+
+    def test2():
+        assert solve_quadratic_equation(Coefficients([-1, 11, -28])).get_values() == Result(4.0, 7.0).get_values()
 
 if __name__ == "__main__":
     Tests.test1()
