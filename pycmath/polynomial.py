@@ -1,7 +1,6 @@
 from .monomial import Monomial, Variable
 from string import ascii_lowercase
 
-
 class Coefficients:
     a: float
     b: float
@@ -49,7 +48,42 @@ class Polynomial:
         self.coefficients = []
 
         mon = Monomial()
+
         while index < len(p):
+            index = last_searched if last_searched != 0 else index
+            current = p[index]
+            if current.isdigit():
+                coefs = ''
+                coefs = current
+                numbers_index = index + 1
+                while numbers_index < len(p):
+                    current_char = p[numbers_index]
+
+                    match current_char.isdigit():
+                        case True:
+                            coefs += current_char
+                            last_searched = numbers_index
+                            numbers_index += 1
+                        case False:
+                            break
+
+                print("Coefficents for this monomial are", coefs)
+                if index - 1 >= 0 and self.check_operator(p[index-1]) and self.check_operator_type(p[index-1]) is False:
+                    mon.coefficient = -float(coefs)
+                else:
+                    mon.coefficient = float(coefs)
+                
+                if index + 1 == len(p) or p[index + 1] not in list(ascii_lowercase):
+                    self.members.append(mon)
+
+            elif current in list(ascii_lowercase):
+                pass
+
+            else:
+                print(f"Char: {current} was not a number or letter.")
+                index += 1
+
+        while index > len(p) + 999:
             if last_searched != 0:
                 index = last_searched
                 if index == len(p) or p[index] in str(self.members[-1].coefficient):
