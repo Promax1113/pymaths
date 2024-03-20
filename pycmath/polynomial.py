@@ -50,7 +50,10 @@ class Polynomial:
         mon = Monomial()
 
         while index < len(p):
-            index = last_searched if last_searched != 0 else index
+            index = last_searched + 1 if last_searched != 0 else index
+            mon = Monomial() if mon.coefficient == 1 else mon
+            if index + 1 >= len(p):
+                break
             current = p[index]
             if current.isdigit():
                 coefs = ''
@@ -75,6 +78,7 @@ class Polynomial:
                 
                 if index + 1 == len(p) or p[index + 1] not in list(ascii_lowercase):
                     self.members.append(mon)
+                    mon = Monomial()
 
             elif current in list(ascii_lowercase):
                 pass
@@ -82,6 +86,7 @@ class Polynomial:
             else:
                 print(f"Char: {current} was not a number or letter.")
                 index += 1
+                last_searched = 0
 
         while index > len(p) + 999:
             if last_searched != 0:
