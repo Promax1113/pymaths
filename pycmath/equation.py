@@ -1,5 +1,20 @@
 from math import sqrt, pow
+from .polynomial import Coefficients, Polynomial, FormatError
 
+class ResultError(Exception):
+    pass
+
+class Equation:
+    member1: Polynomial
+    member2: Polynomial
+
+    def __init__(self, equation: str):
+        equation = equation.replace(" ", "")
+        if "=" not in list(equation):
+            raise FormatError("Equal sign not found!")
+        print(equation.split("=")[1])
+        self.member1 = Polynomial(equation.split("=")[0])
+        self.member2 = Polynomial(equation.split("=")[1])
 class Result:
     x1: float
     x2: float
@@ -18,33 +33,25 @@ class Result:
 
 
 
-class Coefficients:
-    a: float
-    b: float
-    c: float
-
-    def __init__(self, coefs: list[float]):
-        if len(coefs) > 3:
-            print("Could not complete!")
-            raise ValueError("There are too many coefficients!")
-        self.a = coefs[0]
-        self.b = coefs[1]
-        self.c = coefs[2]
-
-    def get_coefs(self) -> dict:
-        return {'a': self.a, 'b': self.b, 'c': self.c}
 
 
 
-def solve_quadratic_equation(coef: Coefficients) -> Result:
+def solve_quadratic_equation(coef: Coefficients, show_results: bool = False):
     disc = pow(coef.b, 2) - (4 * coef.a * coef.c)
     if disc < 0:
-        raise ValueError("There is no real solution!")
-    
+        raise ResultError("There is no real solution!")
+
     pos = (-coef.b + sqrt(disc))/ (coef.a * 2)
     neg = (-coef.b - sqrt(disc))/ (coef.a * 2)
-    return Result(neg, pos, "from_complete_quadratic")
-    
+    result = Result(neg, pos, "from_complete_quadratic")
+    return result if show_results is False else result.get_values()
+
+
+def solve_incomplete_equation(polynomials: Equation, show_results: bool = False):
+    member_deg_1 = [mon.degree for mon in polynomials.member1.members]
+    member_deg_2 = [mon.degree for mon in polynomials.member2.members]
+
+
 class Tests:
     complete_quad: str = "from_complete_quadratic"
     @staticmethod
@@ -53,19 +60,20 @@ class Tests:
     # Should add more tests.
     @staticmethod
     def test2():
-        assert solve_quadratic_equation(Coefficients([-1, 11, -28])).get_values() == Result(4.0, 7.0, Tests.complete_quad).get_values()
+        assert solve_quadratic_equation(Coefficients([1, -11, 28])).get_values() == Result(4.0, 7.0, Tests.complete_quad).get_values()
 
     @staticmethod
     def print_result(to_run):
         try:
             print(f"\nStarting test of {to_run.__name__}!")
-            assert(to_run)
+            to_run()
             print("Successful!\n")
         except:
             print(f"Failed {to_run.__name__}!")
 
 if __name__ == "__main__":
     print("Starting tests!")
-    
+    print(Result(-2.0, 7.0, Tests.complete_quad).get_values() == solve_quadratic_equation(Coefficients([1, -5, -14])).get_values() )
+
     Tests.print_result(Tests.test1)
     Tests.print_result(Tests.test2)
