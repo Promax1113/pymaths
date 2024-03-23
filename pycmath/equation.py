@@ -1,16 +1,20 @@
 from math import sqrt, pow
-from .polynomial import Coefficients, Polynomial
+from .polynomial import Coefficients, Polynomial, FormatError
+
+class ResultError(Exception):
+    pass
+
 class Equation:
     member1: Polynomial
     member2: Polynomial
 
     def __init__(self, equation: str):
         equation = equation.replace(" ", "")
+        if "=" not in list(equation):
+            raise FormatError("Equal sign not found!")
         print(equation.split("=")[1])
-        print([mon.as_string() for mon in Polynomial(equation.split("=")[0]).members], "mem1")
-        print([mon.as_string() for mon in Polynomial(equation.split("=")[1]).members], "mem2")
-        #self.member1 = Polynomial(equation.split("=")[0])
-        #self.member2 = Polynomial(equation.split("=")[1])
+        self.member1 = Polynomial(equation.split("=")[0])
+        self.member2 = Polynomial(equation.split("=")[1])
 class Result:
     x1: float
     x2: float
@@ -35,7 +39,7 @@ class Result:
 def solve_quadratic_equation(coef: Coefficients, show_results: bool = False):
     disc = pow(coef.b, 2) - (4 * coef.a * coef.c)
     if disc < 0:
-        raise ValueError("There is no real solution!")
+        raise ResultError("There is no real solution!")
 
     pos = (-coef.b + sqrt(disc))/ (coef.a * 2)
     neg = (-coef.b - sqrt(disc))/ (coef.a * 2)
