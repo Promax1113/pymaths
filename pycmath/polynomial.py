@@ -7,20 +7,27 @@ class FormatError(Exception):
 
 
 class Coefficients:
-    a: float
-    b: float
-    c: float
+    a: float = 1
+    b: float = 1
+    c: float = 1
 
-    def __init__(self, coefs: list[float]):
-        if len(coefs) > 3:
-            print(coefs)
-            print("Could not complete!")
+    def __init__(self, member_list: list[Monomial]):
+        for mon in member_list:
+
+            if len(mon.variables) == 0:
+                print("No vars!")
+                self.c = mon.coefficient
+            elif mon.variables[0].degree == 1:
+                self.b = mon.coefficient
+            elif mon.variables[0].degree == 2:
+                self.a = mon.coefficient
+            else:
+                print("Did not meet params!")
+
+        if len(member_list) > 3:
             raise ValueError("There are too many coefficients!")
-        self.a = coefs[0]
-        self.b = coefs[1]
-        self.c = coefs[2]
 
-    def get_coefs(self) -> dict:
+    def values(self) -> dict:
         return {'a': self.a, 'b': self.b, 'c': self.c}
 
 
@@ -63,10 +70,12 @@ class Polynomial:
             index = last_searched + 1 if last_searched != 0 and p[index-1] not in list(ascii_lowercase) else index
             mon = Monomial() if mon.coefficient == 1 else mon
             mon.variables = [] if mon.coefficient == 1 else mon.variables
-            if index + 1 >= len(p):
+            if index == len(p):
                 break
             current = p[index]
             if current.isdigit():
+                #TODO somwhere around here it appends a 1. need to fix it!
+    
                 coefs = ''
                 coefs = current
                 numbers_index = index + 1
@@ -79,7 +88,6 @@ class Polynomial:
                             last_searched = numbers_index
                             numbers_index += 1
                         case False:
-                            index = last_searched if last_searched != 0 else index + 1
                             break
 
                 print("Coefficents for this monomial are", coefs)
@@ -88,35 +96,39 @@ class Polynomial:
                 else:
                     mon.coefficient = float(coefs)
                 
-                if index + 1 == len(p) or p[index + 1] not in operators + list(ascii_lowercase):
+
+                if index + 1 == len(p) or index +2 < len(p) and p[last_searched + 1] not in operators + list(ascii_lowercase):
                     self.members.append(mon)
                     mon = Monomial()
                     mon.variables = []
+                
+                index = last_searched if last_searched != 0 else index + 1
+                
 
             elif current in list(ascii_lowercase):
                 local_ind = index
                 degree: str = ""
                 
                 while local_ind < len(p):
-                    match (p[local_ind] in list(ascii_lowercase)):
-                        case True:
-                            if local_ind + 2 < len(p) and p[local_ind+1] == "^":
-                                loop_ind = local_ind + 2
-                                
-                                while loop_ind < len(p):
-                                    match p[loop_ind].isdigit():
-                                        case True:
-                                            degree += p[loop_ind]
-                                            loop_ind += 1
-                                        case False:
-                                            break
+                    print(local_ind, "times ran letter loop.")
+                    if p[local_ind] in list(ascii_lowercase):
+                        if local_ind + 2 < len(p) and p[local_ind+1] == "^":
+                            loop_ind = local_ind + 2
                             
-                            mon.variables.append(Variable(p[local_ind], int(degree))) if degree != "" else mon.variables.append(Variable(p[local_ind]))
-                            print(f"Appended {p[local_ind]}")
-                            local_ind = local_ind + len(degree) + 2 if mon.variables[-1].degree != 1 else local_ind + 1
-                        case False:
-                            index = local_ind
-                            break
+                            while loop_ind < len(p):
+                                match p[loop_ind].isdigit():
+                                    case True:
+                                        degree += p[loop_ind]
+                                        loop_ind += 1
+                                    case False:
+                                        break
+                        
+                        mon.variables.append(Variable(p[local_ind], int(degree))) if degree != "" else mon.variables.append(Variable(p[local_ind]))
+                        print(f"Appended {p[local_ind]}")
+                        local_ind = local_ind + len(degree) + 2 if mon.variables[-1].degree != 1 else local_ind + 1
+                        index = local_ind
+                    else:
+                        break
                     self.members.append(mon)
                     mon = Monomial()
                     mon.variables = []
@@ -130,4 +142,4 @@ class Polynomial:
         
     def get_coefficients(self):
         self.coefficients = [mon.coefficient for mon in self.members]
-        return Coefficients(self.coefficients) if len(self.coefficients) <= 3 else self.coefficients
+        return Coefficients(self.members) if len(self.coefficients) <= 3 else self.coefficients

@@ -24,7 +24,7 @@ class Result:
         self.x2 = _x2
         self.from_operation = _from_operation
 
-    def get_values(self):
+    def values(self):
         return {
             'x1': self.x1,
             'x2': self.x2,
@@ -44,23 +44,21 @@ def solve_quadratic_equation(coef: Coefficients, show_results: bool = False):
     pos = (-coef.b + sqrt(disc))/ (coef.a * 2)
     neg = (-coef.b - sqrt(disc))/ (coef.a * 2)
     result = Result(neg, pos, "from_complete_quadratic")
-    return result if show_results is False else result.get_values()
+    return result if show_results is False else result.values()
 
 
 def solve_incomplete_equation(polynomials: Equation, show_results: bool = False):
-    member_deg_1 = [mon.degree for mon in polynomials.member1.members]
-    member_deg_2 = [mon.degree for mon in polynomials.member2.members]
-
+    pass
 
 class Tests:
     complete_quad: str = "from_complete_quadratic"
     @staticmethod
     def test1():
-        assert solve_quadratic_equation(Coefficients([1, -5, -14])).get_values() == Result(-2.0, 7.0, Tests.complete_quad).get_values()
+        assert solve_quadratic_equation(Polynomial("1x^2 - 5x - 14").get_coefficients(), show_results=True) == Result(-2.0, 7.0, Tests.complete_quad).values()
     # Should add more tests.
     @staticmethod
     def test2():
-        assert solve_quadratic_equation(Coefficients([1, -11, 28])).get_values() == Result(4.0, 7.0, Tests.complete_quad).get_values()
+        assert solve_quadratic_equation(Polynomial("1x^2-11x + 28").get_coefficients(), show_results=True) == Result(4.0, 7.0, Tests.complete_quad).values()
 
     @staticmethod
     def print_result(to_run):
@@ -73,7 +71,5 @@ class Tests:
 
 if __name__ == "__main__":
     print("Starting tests!")
-    print(Result(-2.0, 7.0, Tests.complete_quad).get_values() == solve_quadratic_equation(Coefficients([1, -5, -14])).get_values() )
-
     Tests.print_result(Tests.test1)
     Tests.print_result(Tests.test2)
