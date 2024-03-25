@@ -1,9 +1,9 @@
 from .monomial import Monomial, Variable
 from string import ascii_lowercase
 
+
 class FormatError(Exception):
     pass
-
 
 
 class Coefficients:
@@ -38,7 +38,7 @@ class Polynomial:
 
     @staticmethod
     def check_vector_size(index: int, size: int):
-        if index > size-1:
+        if index > size - 1:
             return False
         else:
             return True
@@ -51,10 +51,10 @@ class Polynomial:
     def check_operator_type(char: str):
         return True if char == '+' else False
 
-    #TODO Should split by operator instead of manually, simplifies parsing
+    # TODO Should split by operator instead of manually, simplifies parsing
 
     def __init__(self, polynomial: str) -> None:
-        operators = ["-", "+", "*", "/", "^"]
+        # operators = ["-", "+", "*", "/", "^"]
 
         p = list(polynomial.replace(" ", ""))
         if "=" in p:
@@ -67,15 +67,15 @@ class Polynomial:
         mon = Monomial()
 
         while index < len(p):
-            index = last_searched + 1 if last_searched != 0 and p[index-1] not in list(ascii_lowercase) else index
+            index = last_searched + 1 if last_searched != 0 and p[index - 1] not in list(ascii_lowercase) else index
             mon = Monomial() if mon.coefficient == 1 else mon
             mon.variables = [] if mon.coefficient == 1 else mon.variables
             if index == len(p):
                 break
             current = p[index]
             if current.isdigit():
-                #TODO somwhere around here it appends a 1. need to fix it!
-    
+                # TODO somewhere around here it appends a 1. need to fix it!
+
                 coefs = ''
                 coefs = current
                 numbers_index = index + 1
@@ -90,31 +90,31 @@ class Polynomial:
                         case False:
                             break
 
-                print("Coefficents for this monomial are", coefs)
-                if index - 1 >= 0 and self.check_operator(p[index-1]) and self.check_operator_type(p[index-1]) is False:
+                print("Coefficients for this monomial are", coefs)
+                if index - 1 >= 0 and self.check_operator(p[index - 1]) and self.check_operator_type(
+                        p[index - 1]) is False:
                     mon.coefficient = -float(coefs)
                 else:
                     mon.coefficient = float(coefs)
-                
 
-                if index + 1 == len(p) or index +1 < len(p) and p[last_searched] not in operators + list(ascii_lowercase):
+                if p[last_searched] == p[-1] or last_searched + 1 < len(p) and p[last_searched + 1] not in list(ascii_lowercase):
+                    print("Item was last.") if p[index] == p[-1] else print(f"Next char: {p[index + 1]}, was not letter or opp")
                     self.members.append(mon)
                     mon = Monomial()
                     mon.variables = []
-                
+
                 index = last_searched if last_searched != 0 else index + 1
-                
 
             elif current in list(ascii_lowercase):
                 local_ind = index
                 degree: str = ""
-                
+
                 while local_ind < len(p):
                     print(local_ind, "times ran letter loop.")
                     if p[local_ind] in list(ascii_lowercase):
-                        if local_ind + 2 < len(p) and p[local_ind+1] == "^":
+                        if local_ind + 2 < len(p) and p[local_ind + 1] == "^":
                             loop_ind = local_ind + 2
-                            
+
                             while loop_ind < len(p):
                                 match p[loop_ind].isdigit():
                                     case True:
@@ -122,8 +122,9 @@ class Polynomial:
                                         loop_ind += 1
                                     case False:
                                         break
-                        
-                        mon.variables.append(Variable(p[local_ind], int(degree))) if degree != "" else mon.variables.append(Variable(p[local_ind]))
+
+                        mon.variables.append(
+                            Variable(p[local_ind], int(degree))) if degree != "" else mon.variables.append(Variable(p[local_ind]))
                         print(f"Appended {p[local_ind]}")
                         local_ind = local_ind + len(degree) + 2 if mon.variables[-1].degree != 1 else local_ind + 1
                         index = local_ind
@@ -139,7 +140,6 @@ class Polynomial:
                 index += 1
                 last_searched = 0
 
-        
     def get_coefficients(self):
         self.coefficients = [mon.coefficient for mon in self.members]
         return Coefficients(self.members) if len(self.coefficients) <= 3 else self.coefficients

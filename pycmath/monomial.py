@@ -1,10 +1,12 @@
 class Variable:
-    letter: str
+    letter: str = None
     degree: int
 
     def __init__(self, lett: str, deg: int = 1) -> None:
         self.degree = deg
         self.letter = lett
+
+
 class Monomial:
     degree: int = 0
     variables: list[Variable] = []
@@ -17,4 +19,4 @@ class Monomial:
         return "".join(to_ret)
 
     def as_string(self):
-        return str(int(self.coefficient) if self.coefficient != 1 else "") + self.combine_vars()
+        return str(int(self.coefficient) if self.coefficient != 1 or len(self.variables) == 0 else "") + self.combine_vars()
