@@ -97,7 +97,7 @@ class Polynomial:
                     mon.coefficient = float(coefs)
                 
 
-                if index + 1 == len(p) or index +2 < len(p) and p[last_searched + 1] not in operators + list(ascii_lowercase):
+                if index + 1 == len(p) or index +1 < len(p) and p[last_searched] not in operators + list(ascii_lowercase):
                     self.members.append(mon)
                     mon = Monomial()
                     mon.variables = []
