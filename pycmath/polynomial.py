@@ -96,7 +96,8 @@ class Polynomial:
                     mon.coefficient = -float(coefs)
                 else:
                     mon.coefficient = float(coefs)
-
+                last_searched = index if last_searched == 0 else last_searched
+                print(f"last searched was {last_searched}")
                 if p[last_searched] == p[-1] or last_searched + 1 < len(p) and p[last_searched + 1] not in list(ascii_lowercase):
                     print("Item was last.") if p[index] == p[-1] else print(f"Next char: {p[index + 1]}, was not letter or opp")
                     self.members.append(mon)
