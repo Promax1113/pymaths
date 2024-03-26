@@ -37,7 +37,11 @@ class Result:
         }
 
 
-def solve_quadratic_equation(coef: Coefficients, show_results: bool = False):
+def solve_quadratic_equation(coef: Coefficients | Polynomial, show_results: bool = False):
+
+    if type(coef) == type(Polynomial):
+        coef = coef.get_coefficients()
+
     disc = pow(coef.b, 2) - (4 * coef.a * coef.c)
     if disc < 0:
         raise ResultError("There is no real solution!")
@@ -49,6 +53,17 @@ def solve_quadratic_equation(coef: Coefficients, show_results: bool = False):
 
 
 def solve_incomplete_equation(polynomials: Equation, show_results: bool = False):
+    # TODO should try to check if they are all on the same side!
+    pol = (polynomials.member1 if len(polynomials.member1.members) > len(polynomials.member2.members) else polynomials.member2).get_coefficients()
+
+
+    # !! I dont know how would i check if its been modified!
+    if pol.a != 1 and pol.b != 1:
+        solve_incomplete_a_b()
+
+
+def solve_incomplete_a_b(a: float, b: float):
+    # this means this one is x^2 + 2x, which also means i should extract common factor or x(x-2)
     pass
 
 
@@ -57,13 +72,13 @@ class Tests:
 
     @staticmethod
     def test1():
-        assert solve_quadratic_equation(Polynomial("1x^2 - 5x - 14").get_coefficients(), show_results=True) == Result(
+        assert solve_quadratic_equation(Polynomial("1x^2 - 5x - 14").get_coefficients(), show_results=True) == Result( # type: ignore
             -2.0, 7.0, Tests.complete_quad).values()
 
     # Should add more tests.
     @staticmethod
     def test2():
-        assert solve_quadratic_equation(Polynomial("1x^2-11x + 28").get_coefficients(), show_results=True) == Result(
+        assert solve_quadratic_equation(Polynomial("1x^2-11x + 28").get_coefficients(), show_results=True) == Result( # type: ignore
             4.0, 7.0, Tests.complete_quad).values()
 
     @staticmethod
@@ -72,8 +87,8 @@ class Tests:
             print(f"\nStarting test of {to_run.__name__}!")
             to_run()
             print("Successful!\n")
-        except:
-            print(f"Failed {to_run.__name__}!")
+        except Exception as e:
+            print(f"Failed {to_run.__name__}! Err: {e}")
 
 
 if __name__ == "__main__":
