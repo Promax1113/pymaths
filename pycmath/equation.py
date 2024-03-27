@@ -38,7 +38,6 @@ class Result:
 
 
 def solve_quadratic_equation(coef: Coefficients | Polynomial, show_results: bool = False):
-
     if type(coef) == type(Polynomial):
         coef = coef.get_coefficients()
 
@@ -54,32 +53,52 @@ def solve_quadratic_equation(coef: Coefficients | Polynomial, show_results: bool
 
 def solve_incomplete_equation(polynomials: Equation, show_results: bool = False):
     # TODO should try to check if they are all on the same side!
-    pol = (polynomials.member1 if len(polynomials.member1.members) > len(polynomials.member2.members) else polynomials.member2).get_coefficients()
-
-
-    # !! I dont know how would i check if its been modified!
+    pol = (polynomials.member1 if len(polynomials.member1.members) > len(
+        polynomials.member2.members) else polynomials.member2).get_coefficients()
+    print(pol.values())
+    # !! I don't know how I would check if it's been modified!
     if pol.a != 1 and pol.b != 1:
-        solve_incomplete_a_b()
+        return solve_incomplete_a_b(pol.a, pol.b)
+    elif pol.a != 1 and pol.c != 1:
+        return solve_incomplete_a_c(pol.a, pol.c)
 
 
+# Works but super unreliably!
 def solve_incomplete_a_b(a: float, b: float):
-    # this means this one is x^2 + 2x, which also means i should extract common factor or x(x-2)
-    pass
+    # this means this one is x^2 + 2x, which also means I should extract common factor or x(x-2)
+    return Result(0, (-(b / a)), "from_incomplete_ab")
+
+
+# Working unreliably!
+def solve_incomplete_a_c(a: float, c: float):
+    # This means it is x^2 + 4 that transforms to x = sqrt(-4) and x1 = 2, x2 = -2
+    c = -c / a
+    if not c >= 0:
+        raise ResultError(f"There is no real solution to sqrt({-c}).")
+    res = sqrt(c)
+    return Result(res, -res, "from_incomplete_ac")
 
 
 class Tests:
+    incompl = "from_incomp"
     complete_quad: str = "from_complete_quadratic"
 
     @staticmethod
     def test1():
-        assert solve_quadratic_equation(Polynomial("1x^2 - 5x - 14").get_coefficients(), show_results=True) == Result( # type: ignore
+        assert solve_quadratic_equation(Polynomial("1x^2 - 5x - 14").get_coefficients(), show_results=True) == Result(
+            # type: ignore
             -2.0, 7.0, Tests.complete_quad).values()
 
     # Should add more tests.
     @staticmethod
     def test2():
-        assert solve_quadratic_equation(Polynomial("1x^2-11x + 28").get_coefficients(), show_results=True) == Result( # type: ignore
+        assert solve_quadratic_equation(Polynomial("1x^2-11x + 28").get_coefficients(), show_results=True) == Result(
+            # type: ignore
             4.0, 7.0, Tests.complete_quad).values()
+
+    @staticmethod
+    def test3():
+        assert solve_incomplete_a_b()
 
     @staticmethod
     def print_result(to_run):
