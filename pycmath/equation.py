@@ -80,7 +80,8 @@ def solve_incomplete_a_c(a: float, c: float):
 
 
 class Tests:
-    incompl = "from_incomp"
+    incompl_ab = "from_incomplete_ab"
+    incompl_ac = "from_incomplete_ac"
     complete_quad: str = "from_complete_quadratic"
 
     @staticmethod
@@ -98,19 +99,25 @@ class Tests:
 
     @staticmethod
     def test3():
-        assert solve_incomplete_a_b()
+        assert solve_incomplete_equation(Equation("3x^2+4x=0")).values() == Result(0, -1.3333333333333333, Tests.incompl_ab)
+    
+    @staticmethod
+    def test4():
+        assert solve_incomplete_equation(Equation("5x^2-20=0")).values() == Result(2, -2, Tests.incompl_ac)
 
     @staticmethod
     def print_result(to_run):
-        try:
-            print(f"\nStarting test of {to_run.__name__}!")
-            to_run()
-            print("Successful!\n")
-        except Exception as e:
-            print(f"Failed {to_run.__name__}! Err: {e}")
+        #try:
+        print(f"\nStarting test of {to_run.__name__}!")
+        to_run()
+        print("Successful!\n")
+        #except Exception as e:
+        #    print(f"Failed {to_run.__name__}! Err: {e.args}")
 
 
 if __name__ == "__main__":
     print("Starting tests!")
     Tests.print_result(Tests.test1)
     Tests.print_result(Tests.test2)
+    Tests.print_result(Tests.test3)
+    Tests.print_result(Tests.test4)
