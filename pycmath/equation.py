@@ -52,14 +52,14 @@ def solve_quadratic_equation(coef: Coefficients | Polynomial, show_results: bool
 
 
 def solve_incomplete_equation(polynomials: Equation, show_results: bool = False):
-    # TODO should try to check if they are all on the same side!
+    # TODO should try to check if they are all on the same side! And move them if not.
     pol = (polynomials.member1 if len(polynomials.member1.members) > len(
         polynomials.member2.members) else polynomials.member2).get_coefficients()
     print(pol.values())
-    # !! I don't know how I would check if it's been modified!
-    if pol.a != 1 and pol.b != 1:
+    #TODO Have implemented a new system but should rethink it.
+    if pol.changed["a"] == True and pol.changed["b"] == True:
         return solve_incomplete_a_b(pol.a, pol.b)
-    elif pol.a != 1 and pol.c != 1:
+    elif pol.changed["a"] == True and pol.changed["c"] == True:
         return solve_incomplete_a_c(pol.a, pol.c)
 
 
@@ -107,6 +107,7 @@ class Tests:
 
     @staticmethod
     def print_result(to_run):
+        """Prints messges for tests."""
         #try:
         print(f"\nStarting test of {to_run.__name__}!")
         to_run()

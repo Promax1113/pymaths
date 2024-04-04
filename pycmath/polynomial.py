@@ -11,16 +11,21 @@ class Coefficients:
     b: float = 1
     c: float = 1
 
+    changed = {"a": False, "b": False, "c": False}
+    
     def __init__(self, member_list: list[Monomial]):
         for mon in member_list:
 
             if len(mon.variables) == 0:
                 print("No vars!")
                 self.c = mon.coefficient
+                self.changed["c"] = True
             elif mon.variables[0].degree == 1:
                 self.b = mon.coefficient
+                self.changed["b"] = True
             elif mon.variables[0].degree == 2:
                 self.a = mon.coefficient
+                self.changed["a"] = True
             else:
                 print("Did not meet params!")
 
