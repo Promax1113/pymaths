@@ -23,6 +23,7 @@ class EquationSystem:
         self.equation_1 = eq_1
         self.equation_2 = eq_2
 
-def solve_system(sys: EquationSystem):
+def solve_system_of_equations(sys: EquationSystem):
     print("{",[ mon.as_string() for mon in sys.equation_1.member1.members], "=", [mon.as_string() for mon in sys.equation_1.member2.members])
     print("{",[mon.as_string() for mon in sys.equation_2.member1.members] , "=", [mon.as_string() for mon in sys.equation_2.member2.members])
+    print("\nSolving!\n")
